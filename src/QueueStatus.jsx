@@ -8,15 +8,41 @@ const QueueStatus = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // const fetchQueueNumber = async () => {
+    //   try {
+    //     const userID = localStorage.getItem("employeeID"); // Retrieve user ID stored during registration
+    //     if (!userID) throw new Error("User not registered!");
+
+    //     const queueRef = collection(db, "queue");
+    //     const q = query(queueRef, where("employeeID", "==", userID));
+    //     const querySnapshot = await getDocs(q);
+
+    //     if (!querySnapshot.empty) {
+    //       const userData = querySnapshot.docs[0].data();
+    //       setQueueNumber(userData.queueNumber);
+    //     } else {
+    //       setQueueNumber("N/A");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching queue number:", error);
+    //     setQueueNumber("Error");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+
     const fetchQueueNumber = async () => {
       try {
         const userID = localStorage.getItem("employeeID"); // Retrieve user ID stored during registration
-        if (!userID) throw new Error("User not registered!");
-
+        if (!userID) {
+          setQueueNumber("N/A");
+          throw new Error("User not registered or employee ID missing!");
+        }
+    
         const queueRef = collection(db, "queue");
         const q = query(queueRef, where("employeeID", "==", userID));
         const querySnapshot = await getDocs(q);
-
+    
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
           setQueueNumber(userData.queueNumber);
@@ -30,6 +56,7 @@ const QueueStatus = () => {
         setLoading(false);
       }
     };
+    
 
     fetchQueueNumber();
   }, []);

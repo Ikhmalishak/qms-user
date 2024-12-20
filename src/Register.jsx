@@ -17,14 +17,14 @@ const Register = () => {
   const [id, setId] = useState("");    // Holds Employee ID
   const [name, setName] = useState(""); // Holds Full Name
   const [email, setEmail] = useState(""); // New email state
-  
+
   // Hook to programmatically navigate to a different route
   const navigate = useNavigate();
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!id.match(/^\d{6}$/)) {
       alert("Employee ID must be exactly 6 digits!");
       return;
@@ -33,7 +33,7 @@ const Register = () => {
       alert("Name must contain only letters and spaces!");
       return;
     }
-  
+
     try {
       // Generate the next queue number
       const queueCollection = collection(db, "queue");
@@ -41,8 +41,8 @@ const Register = () => {
       const queueNumbers = queueSnapshot.docs.map(doc => parseInt(doc.data().queueNumber.replace('D', ''), 10));
       const nextQueueNumber = Math.max(0, ...queueNumbers) + 1;
       const queueNumber = `D${String(nextQueueNumber).padStart(4, "0")}`;
-      
-  
+
+
       // Save the document
       const patientRef = doc(queueCollection, id);
       await setDoc(patientRef, {
@@ -53,7 +53,10 @@ const Register = () => {
         status: "waiting",
         timestamp: Timestamp.now(),
       });
-  
+
+      // Save employeeID to localStorage
+      localStorage.setItem("employeeID", id);
+
       alert(`Your queue number is ${queueNumber}`);
       setId("");
       setName("");
@@ -64,7 +67,7 @@ const Register = () => {
       alert("Error: Unable to register. Please try again.");
     }
   };
-  
+
 
   // JSX: Render the registration form UI
   return (
