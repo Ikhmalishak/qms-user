@@ -76,7 +76,7 @@ const Register = () => {
         {/* Logo Section */}
         <div className="logo-group">
           <header className="register-header">
-            <img src="/src/SKP-logo.jpg" alt="SKP Logo" className="logo" />
+            <img src="/src/assets/SKP-logo.jpg" alt="SKP Logo" className="logo" />
           </header>
         </div>
 
